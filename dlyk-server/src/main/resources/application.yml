@@ -7,7 +7,7 @@ server:
 spring:
   ai:
     openai:
-      api-key: sk-xDeOgEhE1DlYtbfEJUKbELwqZciTP7hI4K0sa6T4dGxzCErl
+      api-key: sk-
       base-url: https://api.chatanywhere.tech
       chat:
         options:
