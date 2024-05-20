@@ -68,7 +68,7 @@
 
         <div style="flex: 1; width: 0; display: flex; align-items: center; justify-content: flex-end">
           <el-dropdown :hide-on-click="false">
-            <div class="el-dropdown-link" style="display: flex; align-items: center;cursor: default">
+            <div class="el-dropdown-link" style="display: flex; align-items: center;cursor: default;outline: none">
               <el-avatar
                   src="http://picture.gptkong.com/images/2e44f441f50c4896a91d19fbe927f96c.png"
               />
