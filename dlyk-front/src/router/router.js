@@ -132,14 +132,14 @@ let router = createRouter({
                     meta : {
                         name : '字典类型管理'
                     },
-                    component:()=>import('../view/dicTypeView.vue'),
+                    component:()=>import('../view/DicTypeView.vue'),
                 },
                 {
                     path:"dicvalue",
                     meta : {
                         name : '字典字段管理'
                     },
-                    component:()=>import('../view/dicValueView.vue'),
+                    component:()=>import('../view/DicValueView.vue'),
                 },
                 {
                     path:"system",
