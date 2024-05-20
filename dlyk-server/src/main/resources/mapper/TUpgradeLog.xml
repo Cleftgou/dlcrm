@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.niu.mapper.TUpdateLogMapper">
+
+    <select id="selectAllUpdateLogs" resultType="com.niu.model.TUpgradeLog">
+        select description, upgrade_time upgradeTime, version
+        from t_upgrade_log
+        order by upgrade_time desc
+    </select>
+
+</mapper>

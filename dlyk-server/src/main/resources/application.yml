@@ -1,0 +1,52 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /
+
+#配置mysql的连接信息（配置数据源）
+spring:
+  ai:
+    openai:
+      api-key: sk-xDeOgEhE1DlYtbfEJUKbELwqZciTP7hI4K0sa6T4dGxzCErl
+      base-url: https://api.chatanywhere.tech
+      chat:
+        options:
+          model: gpt-3.5-turbo
+          temperature: 0.4
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dlyk
+
+  #配置redis的连接信息
+  data:
+    redis:
+      host: 192.168.52.102
+      port: 6379
+      password: 123456
+      database: 0
+
+  #让spring支持bean的循环依赖, BeanA 依赖 BeanB，同时BeanB也依赖BeanA，这就是循环依赖
+  main:
+    allow-circular-references: true
+
+  #后端对象返回json时，指定日期时区和日期格式（否则数据会有时差）
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+#指定mapper.xml文件在什么位置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  #配置mybatis框架执行sql语句时，把sql语句打印到控制台
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#项目启动日志的打印级别
+logging:
+  level:
+    root: info
+
+#定义定时任务的调度时间(秒/分)，当前是5分钟/3分钟
+
