@@ -11,11 +11,16 @@
         <el-form ref="loginReForm" :model="user" label-width="auto" style="width: 80%" :rules="loginRules">
           <div style="font-size: 20px; font-weight: bold;text-align: center;margin-bottom: 20px">欢迎登录动力CRM管理平台</div>
           <el-form-item prop="loginAct">
-            <el-input v-model="user.loginAct" placeholder="请输入账号" />
+            <el-input prefix-icon="user" v-model="user.loginAct" placeholder="请输入账号" />
           </el-form-item>
 
           <el-form-item prop="loginPwd">
-            <el-input type="password" v-model="user.loginPwd" placeholder="请输入密码" />
+            <el-input prefix-icon="lock" type="password" v-model="user.loginPwd" placeholder="请输入密码" />
+          </el-form-item>
+
+          <el-form-item prop="code">
+            <el-input prefix-icon="circle-check" style="flex: 2" v-model="user.code" placeholder="请输入验证码（区分大小写）" />
+            <valid-code style="flex: 1;height: 32px" @update:value="getCode"/>
           </el-form-item>
 
           <el-form-item>
@@ -44,15 +49,33 @@ import {getTokenName, messageTip, removeToken} from "../util/util.js";
 //让过滤器起作用!
 import "../http/httpRequest.js";
 import {hi} from "../http/httpRequest.js";
+import ValidCode from "../components/ValidCode.vue";
 //定义后端接口的端口前缀
 axios.defaults.baseURL = "http://localhost:8088"
 
 export default {
   name: "LoginView",
+  components: {
+    ValidCode
+  },
   data(){
+
+    //自定义验证码规则
+    const validateCode = (rule, value, callback) => {
+      if (value === ''){
+        callback(new Error('请输入验证码'))
+      } else if(value !== this.code){
+        callback(new Error('验证码错误'))
+      } else {
+        callback()
+      }
+    }
+
     return{
+      code: '',//验证码组件传递的code
       //对象定义
       user: {
+        code:'',//表单里用户输入的code
         loginAct: '',
         loginPwd: '',
         rememberMe: '',
@@ -79,6 +102,9 @@ export default {
         loginPwd : [
           { required: true, message: '请输入登录密码', trigger: 'blur' },
           { min: 6, max: 16, message: '密码长度应在6-16位之间', trigger: 'blur' },
+        ],
+        code : [
+          { validator: validateCode, trigger: 'blur' },
         ]
       }
     }
@@ -89,12 +115,20 @@ export default {
   },
   methods: {
 
+    //获取子组件传递的验证码
+    getCode(code){
+      //emit子组件传给父组件
+      //console.log(code)
+      this.code = code//类似这种this.操作实际上就是在data里定义了一个参数，所以不会报错
+    },
+
     userManual(){
       messageTip("根本没什么使用手册，快去登录吧！", "success")
     },
 
     //登录函数
     login(){
+      //console.log(this.code)//生成的验证码
       //验证输入框合法性（执行表单验证规则loginAct和loginPwd）
       //ref 加在普通的元素上，用this.$refs.（ref值） 获取到的是dom元素
       //ref 加在子组件上，用this.$refs.（ref值） 获取到的是组件实例，可以使用组件的所有方法。在使用方法的时候直接this.$refs.（ref值）.方法（） 就可以使用了。
@@ -116,6 +150,9 @@ export default {
 
           //FormData代表了一个表单数据的集合，不同于json，但能直接作为请求体发送到服务器，
           //json还需要先进行序列化（JSON.stringify）然后再发送到服务器，此外Axios会在发送请求时自动处理这个过程
+
+
+          //输入的验证码正确，去往服务器发送登录请求
           let formDate = new FormData();
           formDate.append("loginAct", this.user.loginAct)
           formDate.append("loginPwd", this.user.loginPwd)
@@ -123,33 +160,34 @@ export default {
 
           // 发送 POST 请求
           axios.post('/api/login', formDate)
-          .then(response => {
-            console.log('服务器响应：', response.data);
-            if (response.data.code === 200) {
-              //登录成功，弹窗提示
-              messageTip("登陆成功", "success");
-              //删除旧token
-              removeToken();
+              .then(response => {
+                console.log('服务器响应：', response.data);
+                if (response.data.code === 200) {
+                  //登录成功，弹窗提示
+                  messageTip("登陆成功", "success");
+                  //删除旧token
+                  removeToken();
 
-              //前端存储jwt
-              //如果选了记住我，要放到localStorage里，防止浏览器关闭丢失，否则放到sessionStorage（在当前标签页有效）
-              if (this.user.rememberMe === true){
-                //R对象（response.data），里的data属性就是jwt数据
-                localStorage.setItem(getTokenName(), response.data.data);
-              } else {
-                sessionStorage.setItem(getTokenName(), response.data.data);
-              }
+                  //前端存储jwt
+                  //如果选了记住我，要放到localStorage里，防止浏览器关闭丢失，否则放到sessionStorage（在当前标签页有效）
+                  if (this.user.rememberMe === true){
+                    //R对象（response.data），里的data属性就是jwt数据
+                    localStorage.setItem(getTokenName(), response.data.data);
+                  } else {
+                    sessionStorage.setItem(getTokenName(), response.data.data);
+                  }
 
-              //跳转到系统主页面
-              window.location.href = "/dashboard";//仪表盘页面
-            }else {
-              messageTip("登录失败", "error");
-              //console.log("当前用户的身份:" + response.data);
-            }
-          })
-          .catch(error => {
-            console.error('请求失败：', error);
-          });
+                  //跳转到系统主页面
+                  window.location.href = "/dashboard";//仪表盘页面
+                }else {
+                  messageTip("登录失败", "error");
+                  //console.log("当前用户的身份:" + response.data);
+                }
+              })
+              .catch(error => {
+                console.error('请求失败：', error);
+              });
+
 
         }
       })
