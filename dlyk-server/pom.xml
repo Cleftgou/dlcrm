@@ -113,6 +113,7 @@
 
     </dependencies>
 
+<!--    依赖版本管理技术引入 spring-ai-bom BOM 文件来统一管理 org.springframework.ai 组织下其他依赖的版本-->
     <dependencyManagement>
         <dependencies>
             <dependency>

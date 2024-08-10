@@ -74,7 +74,9 @@ let router = createRouter({
                 {
                     path:"activity/:id",
                     meta : {
-                        name : '市场活动详情'
+                        name : '市场活动详情',
+                        keepAlive:true,
+                        isBack:false,
                     },
                     component:()=>import('../view/ActivityDetailView.vue'),
                 },

@@ -4,28 +4,31 @@ server:
     context-path: /
 
 #配置mysql的连接信息（配置数据源）
+#注意这里引用了要选的子配置文件
 spring:
+  profiles:
+    active: dev
   ai:
     openai:
-      api-key: sk-
-      base-url: https://api.chatanywhere.tech
+      api-key: ${spring.ai.openai.api-key}
+      base-url: ${spring.ai.openai.base-url}
       chat:
         options:
-          model: gpt-3.5-turbo
-          temperature: 0.4
+          model: ${spring.ai.openai.chat.options.model}
+          temperature: ${spring.ai.openai.chat.options.temperature}
   datasource:
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dlyk
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: ${spring.datasource.driver-class-name}
+    url: ${spring.datasource.url}
 
   #配置redis的连接信息
   data:
     redis:
-      host: 192.168.52.102
-      port: 6379
-      password: 123456
-      database: 0
+      host: ${spring.data.redis.host}
+      port: ${spring.data.redis.port}
+      password: ${spring.data.redis.password}
+      database: ${spring.data.redis.database}
 
   #让spring支持bean的循环依赖, BeanA 依赖 BeanB，同时BeanB也依赖BeanA，这就是循环依赖
   main:

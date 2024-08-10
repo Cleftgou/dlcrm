@@ -7,7 +7,7 @@
         <div class="demo-type">
           <div>
             <el-avatar
-                src="http://picture.gptkong.com/images/2e44f441f50c4896a91d19fbe927f96c.png"
+                src="https://cleftgou-sky-take-out.oss-cn-beijing.aliyuncs.com/00028.png"
             />
             <span v-if="!isCollapse">@动力CRM</span>
           </div>
@@ -70,7 +70,7 @@
           <el-dropdown :hide-on-click="false">
             <div class="el-dropdown-link" style="display: flex; align-items: center;cursor: default;outline: none">
               <el-avatar
-                  src="http://picture.gptkong.com/images/2e44f441f50c4896a91d19fbe927f96c.png"
+                  src="https://cleftgou-sky-take-out.oss-cn-beijing.aliyuncs.com/00028.png"
               />
               <span style="color: white;margin-left: 10px ">{{ user.name }}</span><el-icon class="el-icon--right"><arrow-down /></el-icon>
             </div>
